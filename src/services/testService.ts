@@ -64,11 +64,21 @@ async function getTestsById(id: number) {
     return test;
 }
 
+async function getTestsByDiscipline(discipline: string) {
+    return await testRepository.catchTestsByDiscipline(discipline);
+}
+
+async function getTestsByTeacher(teacher: string) {
+    return await testRepository.catchTestsByTeacher(teacher);
+}
+
 const testService = {
     createTest, 
     getTestsByDisciplines, 
     getTestsByTeachers,
-    getTestsById
+    getTestsById,
+    getTestsByDiscipline,
+    getTestsByTeacher
 };
 
 export default testService;

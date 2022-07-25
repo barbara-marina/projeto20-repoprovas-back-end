@@ -10,7 +10,8 @@ async function createTest(req: Request, res: Response) {
 }
 
 async function getTestBy(req: Request, res: Response) {
-    const { groupBy } = req.query
+    const { groupBy } = req.query;
+    
     if (groupBy === "teachers") {
         const result = await testService.getTestsByTeachers();
         res.status(200).send(result);
@@ -19,6 +20,28 @@ async function getTestBy(req: Request, res: Response) {
         res.status(200).send(result);
     } else {
         throw errorHandler.unprocessableEntity("Unprocessable entity.");
+    }
+}
+
+async function searchTestsByDiscipline(req: Request, res: Response) {
+    const { discipline } = req.params;
+
+    if (discipline) {
+        const tests = await testService.getTestsByDiscipline(discipline);
+        res.status(200).send(tests);
+    } else {
+        throw errorHandler.unprocessableEntity("Unprocessable entity.")
+    }
+}
+
+async function searchTestsByTeacher(req: Request, res: Response) {
+    const { teacher } = req.params;
+
+    if (teacher) {
+        const tests = await testService.getTestsByTeacher(teacher);
+        res.status(200).send(tests);
+    } else {
+        throw errorHandler.unprocessableEntity("Unprocessable entity.")
     }
 }
 
@@ -35,7 +58,9 @@ async function getTestById(req: Request, res: Response) {
 const testController = {
     createTest, 
     getTestBy,
-    getTestById
+    getTestById, 
+    searchTestsByDiscipline,
+    searchTestsByTeacher
 };
 
 export default testController;

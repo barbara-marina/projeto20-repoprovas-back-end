@@ -9,5 +9,7 @@ const testRouter = Router();
 testRouter.post("/test", validateSchemaMiddleware(testSchema), tokenMiddleware, testController.createTest);
 testRouter.get("/test", tokenMiddleware, testController.getTestBy);
 testRouter.get("/test/:id", tokenMiddleware, testController.getTestById);
+testRouter.get("/test/discipline/:discipline", tokenMiddleware, testController.searchTestsByDiscipline);
+testRouter.get("/test/teacher/:teacher", tokenMiddleware, testController.searchTestsByTeacher);
 
 export default testRouter;

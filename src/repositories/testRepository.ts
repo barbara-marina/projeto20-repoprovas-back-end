@@ -73,9 +73,68 @@ async function groupByTestsByTeachers() {
                         include: {
                             category: true
                         }
+                    },
+                    discipline: {
+                        include: {
+                            term: true
+                        }
                     }
                 }
             }
+        }
+    });
+}
+
+async function catchTestsByTeacher(teacher: string) {
+    return await prisma.test.findMany({
+        where: {
+            AND: {
+                teacherDiscipline: {
+                    AND: {
+                        teacher: {
+                            name: {
+                                contains: teacher
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        include: {
+            teacherDiscipline: {
+                include: {
+                    teacher: true,
+                    discipline: true
+                }
+            },
+            category: true
+        }
+    });
+}
+
+async function catchTestsByDiscipline(discipline: string) {
+    return await prisma.test.findMany({
+        where: {
+            AND: {
+                teacherDiscipline: {
+                    AND: {
+                        discipline: {
+                            name: {
+                                contains: discipline
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        include: {
+            teacherDiscipline: {
+                include: {
+                    teacher: true,
+                    discipline: true
+                }
+            },
+            category: true
         }
     });
 }
@@ -96,7 +155,9 @@ const testRepository = {
     insertTest,
     groupByTestsByDisciplines,
     groupByTestsByTeachers,
-    findTestsById
+    findTestsById, 
+    catchTestsByDiscipline,
+    catchTestsByTeacher
 };
 
 export default testRepository;

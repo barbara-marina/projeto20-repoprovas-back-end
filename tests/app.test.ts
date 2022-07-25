@@ -209,9 +209,105 @@ describe("Get tests by id tests suite", () => {
         let response = await supertest(app).get(`/test/1`).set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(401);
     });
+});
 
+describe("Search tests by Teacher tests suite", () => {
+    it("given a valid param and valid token, get test", async () => {
+        const login : userData = authFactory.createLogin();
+        const token = await authFactory.createToken(login);
+        
+        const test = {
+            "name": "teste",
+            "pdfUrl": "https://www.google.com.br",
+            "category": "Prática",
+            "discipline": "React",
+            "teacher": "Diego Pinho"
+        };
+
+        await supertest(app).post(`/test`).send(test).set("Authorization", `Bearer ${token}`);
+
+        let response = await supertest(app).get(`/test/teacher/Diego`).set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(200);
+        expect(response.text).not.toBeNull();
+    });
+
+    it("given a valid param and invalid token, return 401", async () => {
+        const login : userData = authFactory.createLogin();
+        const token = "";
+
+        const test = {
+            "name": "teste",
+            "pdfUrl": "https://www.google.com.br",
+            "category": "Prática",
+            "discipline": "React",
+            "teacher": "Diego Pinho"
+        };
+
+        await supertest(app).post(`/test`).send(test).set("Authorization", `Bearer ${token}`);
+
+        let response = await supertest(app).get(`/test/teacher/Diego`).set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(401);
+    });
+});
+
+describe("Get categories tests suite", () => {
+    it("given a valid token, get categories", async () => {
+        const login : userData = authFactory.createLogin();
+        const token = await authFactory.createToken(login);
+        
+        let response = await supertest(app).get(`/categories`).set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(200);
+        expect(response.text).not.toBeNull();
+    });
+
+    it("given an invalid token, return 401", async () => {
+        const login : userData = authFactory.createLogin();
+        const token = "";
+
+        let response = await supertest(app).get(`/categories`).set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(401);
+    });
+});
+
+describe("Search tests by Discipline tests suite", () => {
+    it("given a valid param and valid token, get test", async () => {
+        const login : userData = authFactory.createLogin();
+        const token = await authFactory.createToken(login);
+        
+        const test = {
+            "name": "teste",
+            "pdfUrl": "https://www.google.com.br",
+            "category": "Prática",
+            "discipline": "React",
+            "teacher": "Diego Pinho"
+        };
+
+        await supertest(app).post(`/test`).send(test).set("Authorization", `Bearer ${token}`);
+
+        let response = await supertest(app).get(`/test/discipline/React`).set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(200);
+        expect(response.text).not.toBeNull();
+    });
+
+    it("given a valid param and invalid token, return 401", async () => {
+        const login : userData = authFactory.createLogin();
+        const token = "";
+
+        const test = {
+            "name": "teste",
+            "pdfUrl": "https://www.google.com.br",
+            "category": "Prática",
+            "discipline": "React",
+            "teacher": "Diego Pinho"
+        };
+
+        await supertest(app).post(`/test`).send(test).set("Authorization", `Bearer ${token}`);
+
+        let response = await supertest(app).get(`/test/discipline/React`).set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(401);
+    });
 });
 
 afterAll(async () => {
     await prisma.$disconnect();
-})
+});
