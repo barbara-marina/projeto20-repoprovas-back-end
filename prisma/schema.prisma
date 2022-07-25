@@ -35,8 +35,8 @@ model Test {
     pdfUrl String
     categoryId Int
     category Category @relation(fields: [categoryId], references: [id])
-    teacherDisciplieId Int
-    teacherDiscipline TeacherDiscipline @relation(fields: [teacherDisciplieId], references: [id])
+    teacherDisciplineId Int
+    teacherDiscipline TeacherDiscipline @relation(fields: [teacherDisciplineId], references: [id])
     createdAt DateTime @default(now()) 
 
     @@map("tests")
